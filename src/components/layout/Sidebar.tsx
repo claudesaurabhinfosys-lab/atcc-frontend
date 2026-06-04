@@ -21,6 +21,7 @@ const navItems = [
 const adminItems = [
   { href: '/admin/users',   label: 'Users',         icon: Users },
   { href: '/admin/company', label: 'Company',       icon: Settings },
+  { href: '/admin/super',   label: 'Super Admin',   icon: Shield, superOnly: true },
 ]
 
 export function Sidebar() {
@@ -67,7 +68,7 @@ export function Sidebar() {
             <div className="pt-4 pb-1 px-3">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Admin</p>
             </div>
-            {adminItems.map(({ href, label, icon: Icon }) => (
+            {adminItems.filter(item => !('superOnly' in item && item.superOnly) || roles.some((r: any) => (typeof r === 'string' ? r : r?.name) === 'super_admin')).map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
