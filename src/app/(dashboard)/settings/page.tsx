@@ -42,7 +42,7 @@ export default function SettingsPage() {
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div><p className="text-gray-500">Name</p><p className="font-medium text-gray-900 mt-0.5">{(session?.user as any)?.name ?? '—'}</p></div>
           <div><p className="text-gray-500">Email</p><p className="font-medium text-gray-900 mt-0.5">{session?.user?.email ?? '—'}</p></div>
-          <div><p className="text-gray-500">Role</p><p className="font-medium text-gray-900 mt-0.5 capitalize">{((session?.user as any)?.roles?.[0] ?? '—').replace('_', ' ')}</p></div>
+          <div><p className="text-gray-500">Role</p><p className="font-medium text-gray-900 mt-0.5 capitalize">{(() => { const r = (session?.user as any)?.roles?.[0]; return r ? (typeof r === 'string' ? r : r?.name ?? '—').replace(/_/g,' ') : '—' })()}</p></div>
           <div><p className="text-gray-500">Company</p><p className="font-medium text-gray-900 mt-0.5">{(session?.user as any)?.company?.name ?? 'Platform Admin'}</p></div>
         </div>
       </div>

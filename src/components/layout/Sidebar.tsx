@@ -94,7 +94,7 @@ export function Sidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">{session?.user?.name}</p>
-            <p className="text-xs text-gray-400 capitalize">{roles[0]?.replace('_', ' ')}</p>
+            <p className="text-xs text-gray-400 capitalize">{(typeof roles[0] === 'string' ? roles[0] : (roles[0] as any)?.name ?? '').replace(/_/g, ' ')}</p>
           </div>
           <ChevronRight size={14} className="text-gray-400" />
         </div>
