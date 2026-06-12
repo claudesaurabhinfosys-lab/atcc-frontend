@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import {
   LayoutDashboard, ClipboardList, BookOpen, BarChart2,
-  Settings, Shield, Users, ChevronRight,
+  Settings, Shield, Users, ChevronRight, Layers,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -19,9 +19,10 @@ const navItems = [
 ]
 
 const adminItems = [
-  { href: '/admin/users',   label: 'Users',         icon: Users },
-  { href: '/admin/company', label: 'Company',       icon: Settings },
-  { href: '/admin/super',   label: 'Super Admin',   icon: Shield, superOnly: true },
+  { href: '/admin/users',              label: 'Users',        icon: Users },
+  { href: '/admin/company',            label: 'Company',      icon: Settings },
+  { href: '/admin/super',              label: 'Super Admin',  icon: Shield,  superOnly: true },
+  { href: '/admin/super/scope-types',  label: 'Scope Types',  icon: Layers,  superOnly: true },
 ]
 
 export function Sidebar() {

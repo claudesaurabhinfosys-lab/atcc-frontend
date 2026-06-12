@@ -3,21 +3,10 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import api from '@/lib/api'
 
-const SCOPE_TYPES = [
-  { value: 'company_wide',    label: 'Company Wide' },
-  { value: 'business_unit',   label: 'Business Unit' },
-  { value: 'region',          label: 'Region' },
-  { value: 'depot',           label: 'Depot' },
-  { value: 'customer_site',   label: 'Customer Site' },
-  { value: 'route_corridor',  label: 'Route / Corridor' },
-  { value: 'vehicle_type',    label: 'Vehicle Type' },
-  { value: 'freight_type',    label: 'Freight Type' },
-  { value: 'activity_task',   label: 'Activity / Task' },
-  { value: 'contractor',      label: 'Contractor' },
-  { value: 'incident_review', label: 'Incident Review' },
-]
+interface ScopeType { id: number; value: string; label: string }
 
 const schema = z.object({
   title:            z.string().min(3, 'Title must be at least 3 characters'),
@@ -40,7 +29,15 @@ export default function Step1Details({ defaultValues, onSubmit, loading }: Props
     defaultValues,
   })
 
+  const [scopeTypes, setScopeTypes] = useState<ScopeType[]>([])
+
   useEffect(() => { if (defaultValues) reset(defaultValues) }, [])
+
+  useEffect(() => {
+    api.get('/scope-types')
+      .then(r => setScopeTypes(r.data))
+      .catch(() => {})
+  }, [])
 
   return (
     <form id="step1-form" onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -72,7 +69,7 @@ export default function Step1Details({ defaultValues, onSubmit, loading }: Props
             className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"
           >
             <option value="">Select scope...</option>
-            {SCOPE_TYPES.map(s => (
+            {scopeTypes.map(s => (
               <option key={s.value} value={s.value}>{s.label}</option>
             ))}
           </select>
