@@ -29,8 +29,8 @@ export default function Step2Templates({ selected, onChange }: Props) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Select Risk Templates</h2>
-          <p className="text-sm text-gray-500 mt-0.5">Choose which risk areas apply to this assessment. {selected.length} selected.</p>
+          <h2 className="text-lg font-semibold text-gray-900">Areas of Risk</h2>
+          <p className="text-sm text-gray-500 mt-0.5">Choose which areas of risk apply to this assessment. {selected.length} selected.</p>
         </div>
         <div className="flex gap-2">
           <button onClick={selectAll} className="text-xs text-primary hover:underline">Select All</button>
