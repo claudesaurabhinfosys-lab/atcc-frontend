@@ -31,7 +31,15 @@ export default function Step1Details({ defaultValues, onSubmit, loading }: Props
 
   const [scopeTypes, setScopeTypes] = useState<ScopeType[]>([])
 
-  useEffect(() => { if (defaultValues) reset(defaultValues) }, [])
+  const oneYearFromNow = (() => {
+    const d = new Date()
+    d.setFullYear(d.getFullYear() + 1)
+    return d.toISOString().split('T')[0]
+  })()
+
+  useEffect(() => {
+    reset({ next_review_date: oneYearFromNow, ...defaultValues })
+  }, [])
 
   useEffect(() => {
     api.get('/scope-types')
