@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import {
   LayoutDashboard, ClipboardList, BookOpen, BarChart2,
-  Settings, Shield, Users, ChevronRight, Layers, ListChecks,
+  Settings, Shield, Users, ChevronRight, Layers, ListChecks, AlertTriangle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -20,6 +20,7 @@ const navItems = [
 // Sub-links under Knowledge Base, visible to super_admin only
 const kbAdminItems = [
   { href: '/admin/super/risk-templates', label: 'Areas of Risk', icon: ListChecks },
+  { href: '/admin/super/hazards',        label: 'Hazards List',  icon: AlertTriangle },
   { href: '/admin/super/scope-types',    label: 'Scope Types',   icon: Layers },
 ]
 
