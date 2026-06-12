@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import {
   LayoutDashboard, ClipboardList, BookOpen, BarChart2,
-  Settings, Shield, Users, ChevronRight, Layers,
+  Settings, Shield, Users, ChevronRight, Layers, ListChecks,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -14,15 +14,19 @@ const navItems = [
   { href: '/assessments',   label: 'Assessments',   icon: ClipboardList },
   { href: '/risk-register', label: 'Risk Register', icon: Shield },
   { href: '/reports',       label: 'Reports',       icon: BarChart2 },
-  { href: '/knowledge',     label: 'Knowledge Base',icon: BookOpen },
   { href: '/settings',      label: 'Settings',      icon: Settings },
 ]
 
+// Sub-links under Knowledge Base, visible to super_admin only
+const kbAdminItems = [
+  { href: '/admin/super/risk-templates', label: 'Areas of Risk', icon: ListChecks },
+  { href: '/admin/super/scope-types',    label: 'Scope Types',   icon: Layers },
+]
+
 const adminItems = [
-  { href: '/admin/users',              label: 'Users',        icon: Users },
-  { href: '/admin/company',            label: 'Company',      icon: Settings },
-  { href: '/admin/super',              label: 'Super Admin',  icon: Shield,  superOnly: true },
-  { href: '/admin/super/scope-types',  label: 'Scope Types',  icon: Layers,  superOnly: true },
+  { href: '/admin/users',   label: 'Users',       icon: Users },
+  { href: '/admin/company', label: 'Company',     icon: Settings },
+  { href: '/admin/super',   label: 'Super Admin', icon: Shield, superOnly: true },
 ]
 
 export function Sidebar() {
@@ -30,7 +34,10 @@ export function Sidebar() {
   const { data: session } = useSession()
   const roles = (session?.user as any)?.roles ?? []
   const isAdmin = roles.includes('super_admin') || roles.includes('company_admin')
+  const isSuperAdmin = roles.some((r: any) => (typeof r === 'string' ? r : r?.name) === 'super_admin')
   const company = (session?.user as any)?.company
+
+  const isKbActive = pathname.startsWith('/knowledge') || pathname.startsWith('/admin/super/risk-templates') || pathname.startsWith('/admin/super/scope-types')
 
   return (
     <aside className="w-64 bg-white border-r flex flex-col">
@@ -64,26 +71,61 @@ export function Sidebar() {
           </Link>
         ))}
 
+        {/* Knowledge Base + super-admin sub-items */}
+        <Link
+          href="/knowledge"
+          className={cn(
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition',
+            isKbActive ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:bg-gray-100'
+          )}
+        >
+          <BookOpen size={16} />
+          Knowledge Base
+        </Link>
+
+        {isSuperAdmin && (
+          <div className="ml-3 pl-3 border-l-2 border-gray-100 space-y-0.5">
+            {kbAdminItems.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  'flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium transition',
+                  pathname.startsWith(href)
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                )}
+              >
+                <Icon size={13} />
+                {label}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Admin section */}
         {isAdmin && (
           <>
             <div className="pt-4 pb-1 px-3">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Admin</p>
             </div>
-            {adminItems.filter(item => !('superOnly' in item && item.superOnly) || roles.some((r: any) => (typeof r === 'string' ? r : r?.name) === 'super_admin')).map(({ href, label, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition',
-                  pathname.startsWith(href)
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-gray-600 hover:bg-gray-100'
-                )}
-              >
-                <Icon size={16} />
-                {label}
-              </Link>
-            ))}
+            {adminItems
+              .filter(item => !item.superOnly || isSuperAdmin)
+              .map(({ href, label, icon: Icon }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition',
+                    pathname === href
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  )}
+                >
+                  <Icon size={16} />
+                  {label}
+                </Link>
+              ))}
           </>
         )}
       </nav>
