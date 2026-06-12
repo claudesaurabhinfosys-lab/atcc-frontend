@@ -56,7 +56,7 @@ export default function Step3Hazards({ moduleCodes, selected, onChange }: Props)
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">Review Hazards</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Areas of Risk: Hazards</h2>
         <p className="text-sm text-gray-500 mt-0.5">
           Select the hazards relevant to this assessment. {selected.length} of {totalHazards} selected.
         </p>
