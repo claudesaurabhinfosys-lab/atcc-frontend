@@ -48,7 +48,7 @@ export default function Step3Hazards({ moduleCodes, selected, onChange }: Props)
     const codes = (hazardsByModule[module] ?? []).map(h => h.hazard_code)
     const allSelected = codes.every(c => selected.includes(c))
     if (allSelected) onChange(selected.filter(c => !codes.includes(c)))
-    else onChange([...new Set([...selected, ...codes])])
+    else onChange(Array.from(new Set([...selected, ...codes])))
   }
 
   const totalHazards = Object.values(hazardsByModule).flat().length
